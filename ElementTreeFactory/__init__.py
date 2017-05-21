@@ -73,16 +73,16 @@ class ElementTreeFactory(object):
 
     def _format(self, content):
         """Reformats content into a human-readable string"""
-        if isinstance(content, basestring):
+        if isinstance(content, str):
             # Strings (including unicode) are returned verbatim
             return content
         else:
             # Everything else is converted to a unicode string
-            return unicode(content)
+            return str(content)
 
     def _append(self, node, contents):
         """Adds content (string, node, node-list, etc.) to a node"""
-        if isinstance(contents, basestring):
+        if isinstance(contents, str):
             if contents != '':
                 if len(node) == 0:
                     if node.text is None:
@@ -110,7 +110,7 @@ class ElementTreeFactory(object):
             _name = '{%s}%s' % (self._namespace, _name)
             attrs = dict(
                 ('{%s}%s' % (self._namespace, key), value)
-                for (key, value) in attr.iteritems()
+                for (key, value) in attr.items()
             )
         def clean_attr(key, value):
             # This little utility routine is used to clean up attributes:
@@ -118,18 +118,18 @@ class ElementTreeFactory(object):
             # boolean False is discarded, all other values are converted to
             # strings, and trailing underscores are removed from key names
             # (convenience for names which are python keywords)
-            if not isinstance(key, basestring):
-                key = unicode(key)
+            if not isinstance(key, str):
+                key = str(key)
             else:
                 key = key.rstrip('_')
             if value is True:
                 value = key
-            elif not isinstance(value, basestring):
-                value = unicode(value)
+            elif not isinstance(value, str):
+                value = str(value)
             return key, value
         e = et.Element(_name, dict(
             clean_attr(key, value)
-            for key, value in attrs.iteritems()
+            for key, value in attrs.items()
             if value is not None and value is not False
         ))
         for content in contents:
